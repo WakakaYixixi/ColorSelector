@@ -31,16 +31,17 @@ public class SelectColor : MonoBehaviour
         pos = MouseToCanvas(pos,canvas);
         RectTransform rectTrans = o.GetComponent<RectTransform>();
         Image img = o.GetComponent<Image>();
-        if (pos.x > rectTrans.localPosition.x + rectTrans.sizeDelta.x / 2
-            || pos.x < rectTrans.localPosition.x - rectTrans.sizeDelta.x / 2
-            || pos.y > rectTrans.localPosition.y + rectTrans.sizeDelta.y / 2
-            || pos.y < rectTrans.localPosition.y - rectTrans.sizeDelta.y / 2)
+        Vector3 targetPos = rectTrans.localPosition + transform.localPosition;
+        if (pos.x > targetPos.x + rectTrans.sizeDelta.x / 2
+            || pos.x < targetPos.x - rectTrans.sizeDelta.x / 2
+            || pos.y > targetPos.y + rectTrans.sizeDelta.y / 2
+            || pos.y < targetPos.y - rectTrans.sizeDelta.y / 2)
         {
             return;
         }
-        Selector.transform.localPosition = pos;
-        float pixelX = ((pos.x + rectTrans.sizeDelta.x / 2) / rectTrans.sizeDelta.x) * img.sprite.texture.width;
-        float pixelY = ((pos.y + rectTrans.sizeDelta.y / 2) / rectTrans.sizeDelta.y) * img.sprite.texture.height;
+        Selector.transform.localPosition = pos - transform.localPosition - rectTrans.localPosition;
+        float pixelX = ((Selector.transform.localPosition.x + rectTrans.sizeDelta.x / 2) / rectTrans.sizeDelta.x) * img.sprite.texture.width;
+        float pixelY = ((Selector.transform.localPosition.y + rectTrans.sizeDelta.y / 2) / rectTrans.sizeDelta.y) * img.sprite.texture.height;
         Color color = img.sprite.texture.GetPixel((int)pixelX, (int)pixelY);
         color = brightness.FreshColorTex(color);
         viewer.color = color;

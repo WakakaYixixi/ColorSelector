@@ -32,15 +32,16 @@ public class BrightnessBar : MonoBehaviour
         pos = SelectColor.MouseToCanvas(pos,canvas);
         RectTransform rectTrans = o.GetComponent<RectTransform>();
         Image img = o.GetComponent<Image>();
-        if (pos.x > rectTrans.localPosition.x + rectTrans.sizeDelta.x / 2
-            || pos.x < rectTrans.localPosition.x - rectTrans.sizeDelta.x / 2
-            || pos.y > rectTrans.localPosition.y + rectTrans.sizeDelta.y / 2
-            || pos.y < rectTrans.localPosition.y - rectTrans.sizeDelta.y / 2)
+        Vector3 targetPos = rectTrans.localPosition + rectTrans.parent.localPosition;
+        if (pos.x > targetPos.x + rectTrans.sizeDelta.x / 2
+            || pos.x < targetPos.x - rectTrans.sizeDelta.x / 2
+            || pos.y > targetPos.y + rectTrans.sizeDelta.y / 2
+            || pos.y < targetPos.y - rectTrans.sizeDelta.y / 2)
         {
             return;
         }
-        sliderPersent = (pos.x- rectTrans.localPosition.x + rectTrans.sizeDelta.x / 2) / rectTrans.sizeDelta.x;
-        pointer.GetComponent<RectTransform>().localPosition = new Vector3(sliderPersent*bar.rectTransform.sizeDelta.x- rectTrans.sizeDelta.x/2, pointer.transform.localPosition.y, pointer.transform.localPosition.z);
+        sliderPersent = (pos.x - rectTrans.parent.localPosition.x - rectTrans.localPosition.x + rectTrans.sizeDelta.x / 2) / rectTrans.sizeDelta.x;
+        pointer.GetComponent<RectTransform>().localPosition = new Vector3(sliderPersent * bar.rectTransform.sizeDelta.x - rectTrans.sizeDelta.x / 2, pointer.transform.localPosition.y, pointer.transform.localPosition.z);
         viewer.color = GetTargetColor(curShowColor, sliderPersent);
     }
 
