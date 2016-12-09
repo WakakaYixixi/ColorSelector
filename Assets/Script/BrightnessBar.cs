@@ -45,6 +45,13 @@ public class BrightnessBar : MonoBehaviour
         viewer.color = GetTargetColor(curShowColor, sliderPersent);
     }
 
+    public void SetBrightness(float per)
+    {
+        RectTransform rectTrans = GetComponent<RectTransform>();
+        sliderPersent = per;
+        pointer.GetComponent<RectTransform>().localPosition = new Vector3(sliderPersent * bar.rectTransform.sizeDelta.x - rectTrans.sizeDelta.x / 2, pointer.transform.localPosition.y, pointer.transform.localPosition.z);
+    }
+
     public Color FreshColorTex(Color color)
     {
         for (int i = 0; i < tex.width; i++)
